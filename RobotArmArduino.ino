@@ -39,6 +39,27 @@ void loop()
     else if ( 4 == servoNr ) {
       myservo4.write(servoPos);
     }
-    delay(10);
+    delay(15);
+  }
+  if( 2 <= Serial.available() )
+  {
+    unsigned int servoNr = Serial.read();
+    unsigned int servoPos = Serial.read();
+    Serial.println(servoNr);
+    Serial.println(servoPos);
+ 
+    if ( 1 == servoNr ) {
+      myservo1.write(servoPos);
+    }
+    else if ( 2 == servoNr ) {
+      myservo2.write(servoPos);
+    }
+    else if ( 3 == servoNr ) {
+      myservo3.write(servoPos);
+    }
+    else if ( 4 == servoNr ) {
+      myservo4.write(servoPos);
+    }
+    delay(15);
   }
 }
