@@ -26,6 +26,8 @@ if( 4 <= bluetooth.available() )
     unsigned int servoPosIn1 = bluetooth.read() - ASCII_DIFF;
     unsigned int servoPosIn2 = bluetooth.read() - ASCII_DIFF;
     unsigned int servoPosIn3 = bluetooth.read() - ASCII_DIFF;
+    Serial.read();
+    Serial.read();
     unsigned int servoPos = servoPosIn1*100+servoPosIn2*10+servoPosIn3;
     Serial.print("Servo:");
     Serial.print(servoNr);
@@ -59,6 +61,8 @@ if( 4 <= bluetooth.available() )
     unsigned int servoPosIn1 = Serial.read() - ASCII_DIFF;
     unsigned int servoPosIn2 = Serial.read() - ASCII_DIFF;
     unsigned int servoPosIn3 = Serial.read() - ASCII_DIFF;
+    Serial.read();
+    Serial.read();
     unsigned int servoPos = servoPosIn1*100+servoPosIn2*10+servoPosIn3;
     Serial.print("Servo:");
     Serial.print(servoNr);
