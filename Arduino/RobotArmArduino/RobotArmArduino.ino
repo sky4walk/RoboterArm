@@ -1,7 +1,9 @@
 #include <SoftwareSerial.h>
 #include <Servo.h>
+
 #define ASCII_DIFF 48
-#define MOVE_DELAY 100
+#define MOVE_DELAY 500
+
 int bluetoothTx = 6;
 int bluetoothRx = 7;
  
@@ -17,11 +19,20 @@ void setup()
  
   Serial.begin(9600);
   bluetooth.begin(9600);
+
+  myservo1.write(90);
+  delay(MOVE_DELAY);
+  myservo2.write(100);
+  delay(MOVE_DELAY);
+  myservo3.write(40);
+  delay(MOVE_DELAY);
+  myservo4.write(65);
+  delay(MOVE_DELAY);
 }
  
 void loop()
 {
-if( 4 <= bluetooth.available() )
+if( 6 <= bluetooth.available() )
   {
     unsigned int servoNr     = bluetooth.read() - ASCII_DIFF;
     unsigned int servoPosIn1 = bluetooth.read() - ASCII_DIFF;
@@ -56,7 +67,7 @@ if( 4 <= bluetooth.available() )
     }
     delay(MOVE_DELAY);
   }
-  if( 4 <= Serial.available() )
+  if( 6 <= Serial.available() )
   {
     unsigned int servoNr     = Serial.read() - ASCII_DIFF;
     unsigned int servoPosIn1 = Serial.read() - ASCII_DIFF;
