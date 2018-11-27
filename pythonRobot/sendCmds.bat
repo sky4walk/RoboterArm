@@ -1,0 +1,2 @@
+python moveCommands.py
+cmd .
