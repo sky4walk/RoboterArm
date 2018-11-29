@@ -12,13 +12,23 @@ SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
  
 void setup()
 {
+  if (Serial) {
+    Serial.end();
+  }
+  Serial.begin(9600);
+  while (!Serial) {
+    ;	  
+  }
+
   myservo1.attach(8);
   myservo2.attach(9);
   myservo3.attach(10);
   myservo4.attach(11);
  
-  Serial.begin(9600);
   bluetooth.begin(9600);
+
+  Serial.println("ready");
+  bluetooth.println("ready");
 
   myservo1.write(90);
   delay(MOVE_DELAY);
