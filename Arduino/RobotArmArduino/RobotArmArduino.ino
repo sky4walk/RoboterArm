@@ -42,80 +42,69 @@ void setup()
  
 void loop()
 {
-if( 4 <= bluetooth.available() )
-  {
-    unsigned int servoNr     = bluetooth.read() - ASCII_DIFF;
-    unsigned int servoPosIn1 = bluetooth.read() - ASCII_DIFF;
-    unsigned int servoPosIn2 = bluetooth.read() - ASCII_DIFF;
-    unsigned int servoPosIn3 = bluetooth.read() - ASCII_DIFF;
+  boolean received = false;
+  unsigned int servoNr = 0;
+  unsigned int servoPosIn1 = 0;
+  unsigned int servoPosIn2 = 0;
+  unsigned int servoPosIn3 = 0;
+  
+  if( 4 <= bluetooth.available() ) {
+    servoNr     = bluetooth.read() - ASCII_DIFF;
+    servoPosIn1 = bluetooth.read() - ASCII_DIFF;
+    servoPosIn2 = bluetooth.read() - ASCII_DIFF;
+    servoPosIn3 = bluetooth.read() - ASCII_DIFF;
+    received = true;
+  }
+  else if( 4 <= Serial.available() ) {
+    servoNr     = Serial.read() - ASCII_DIFF;
+    servoPosIn1 = Serial.read() - ASCII_DIFF;
+    servoPosIn2 = Serial.read() - ASCII_DIFF;
+    servoPosIn3 = Serial.read() - ASCII_DIFF;
+    received = true;
+  }  
+  if ( true == received ) {
     unsigned int servoPos = servoPosIn1*100+servoPosIn2*10+servoPosIn3;
-    delay(MOVE_DELAY);
     while( bluetooth.available() ) {
       bluetooth.read();
+    }
+    while( Serial.available() ) {
+      Serial.read();
     }
   
     bluetooth.print("Servo:");
     bluetooth.print(servoNr);
     bluetooth.print(" Pos:");
     bluetooth.print(servoPos);
- 
-    if ( 1 == servoNr ) {
-      myservo1.write(servoPos);
-      bluetooth.println(" On 1");
-    }
-    else if ( 2 == servoNr ) {
-      myservo2.write(servoPos);
-      bluetooth.println(" On 2");
-    }
-    else if ( 3 == servoNr ) {
-      myservo3.write(servoPos);
-      bluetooth.println(" On 3");
-    }
-    else if ( 4 == servoNr ) {
-      myservo4.write(servoPos);
-      bluetooth.println(" On 4");
-    }
-    else {
-      bluetooth.println(" Off");
-    }
-    delay(MOVE_DELAY);
-  }
-  if( 4 <= Serial.available() )
-  {
-    unsigned int servoNr     = Serial.read() - ASCII_DIFF;
-    unsigned int servoPosIn1 = Serial.read() - ASCII_DIFF;
-    unsigned int servoPosIn2 = Serial.read() - ASCII_DIFF;
-    unsigned int servoPosIn3 = Serial.read() - ASCII_DIFF;
-    unsigned int servoPos = servoPosIn1*100+servoPosIn2*10+servoPosIn3;
-    delay(MOVE_DELAY);
-    while( Serial.available() ) {
-      Serial.read();
-    }
-    
+
     Serial.print("Servo:");
     Serial.print(servoNr);
     Serial.print(" Pos:");
     Serial.print(servoPos);
- 
+    
     if ( 1 == servoNr ) {
       myservo1.write(servoPos);
+      bluetooth.println(" On 1");
       Serial.println(" On 1");
     }
     else if ( 2 == servoNr ) {
       myservo2.write(servoPos);
+      bluetooth.println(" On 2");
       Serial.println(" On 2");
     }
     else if ( 3 == servoNr ) {
       myservo3.write(servoPos);
+      bluetooth.println(" On 3");
       Serial.println(" On 3");
     }
     else if ( 4 == servoNr ) {
       myservo4.write(servoPos);
+      bluetooth.println(" On 4");
       Serial.println(" On 4");
     }
     else {
+      bluetooth.println(" Off");
       Serial.println(" Off");
     }
-    delay(MOVE_DELAY);
   }
+  delay(MOVE_DELAY);
 }
