@@ -42,50 +42,56 @@ void setup()
  
 void loop()
 {
-if( 6 <= bluetooth.available() )
+if( 4 <= bluetooth.available() )
   {
     unsigned int servoNr     = bluetooth.read() - ASCII_DIFF;
     unsigned int servoPosIn1 = bluetooth.read() - ASCII_DIFF;
     unsigned int servoPosIn2 = bluetooth.read() - ASCII_DIFF;
     unsigned int servoPosIn3 = bluetooth.read() - ASCII_DIFF;
-    bluetooth.read();
-    bluetooth.read();
     unsigned int servoPos = servoPosIn1*100+servoPosIn2*10+servoPosIn3;
-    Serial.print("Servo:");
-    Serial.print(servoNr);
-    Serial.print(" Pos:");
-    Serial.print(servoPos);
+    delay(MOVE_DELAY);
+    while( bluetooth.available() ) {
+      bluetooth.read();
+    }
+  
+    bluetooth.print("Servo:");
+    bluetooth.print(servoNr);
+    bluetooth.print(" Pos:");
+    bluetooth.print(servoPos);
  
     if ( 1 == servoNr ) {
       myservo1.write(servoPos);
-      Serial.println(" On 1");
+      bluetooth.println(" On 1");
     }
     else if ( 2 == servoNr ) {
       myservo2.write(servoPos);
-      Serial.println(" On 2");
+      bluetooth.println(" On 2");
     }
     else if ( 3 == servoNr ) {
       myservo3.write(servoPos);
-      Serial.println(" On 3");
+      bluetooth.println(" On 3");
     }
     else if ( 4 == servoNr ) {
       myservo4.write(servoPos);
-      Serial.println(" On 4");
+      bluetooth.println(" On 4");
     }
     else {
-      Serial.println(" Off");
+      bluetooth.println(" Off");
     }
     delay(MOVE_DELAY);
   }
-  if( 6 <= Serial.available() )
+  if( 4 <= Serial.available() )
   {
     unsigned int servoNr     = Serial.read() - ASCII_DIFF;
     unsigned int servoPosIn1 = Serial.read() - ASCII_DIFF;
     unsigned int servoPosIn2 = Serial.read() - ASCII_DIFF;
     unsigned int servoPosIn3 = Serial.read() - ASCII_DIFF;
-    Serial.read();
-    Serial.read();
     unsigned int servoPos = servoPosIn1*100+servoPosIn2*10+servoPosIn3;
+    delay(MOVE_DELAY);
+    while( Serial.available() ) {
+      Serial.read();
+    }
+    
     Serial.print("Servo:");
     Serial.print(servoNr);
     Serial.print(" Pos:");
