@@ -7,7 +7,7 @@
 int bluetoothTx = 6;
 int bluetoothRx = 7;
  
-Servo myservo1, myservo2, myservo3, myservo4;
+Servo myservo1, myservo2, myservo3, myservo4, myservo5;
 SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
  
 void setup()
@@ -24,6 +24,7 @@ void setup()
   myservo2.attach(9);
   myservo3.attach(10);
   myservo4.attach(11);
+  myservo5.attach(12);
  
   bluetooth.begin(9600);
 
@@ -37,6 +38,8 @@ void setup()
   myservo3.write(40);
   delay(MOVE_DELAY);
   myservo4.write(65);
+  delay(MOVE_DELAY);
+  myservo5.write(60);
   delay(MOVE_DELAY);
 }
  
@@ -100,6 +103,11 @@ void loop()
       myservo4.write(servoPos);
       bluetooth.println(" On 4");
       Serial.println(" On 4");
+    }
+    else if ( 5 == servoNr ) {
+      myservo5.write(servoPos);
+      bluetooth.println(" On 5");
+      Serial.println(" On 5");
     }
     else {
       bluetooth.println(" Off");
