@@ -13,5 +13,12 @@ baud = 9600
 
 ser = serial.Serial(port, baud, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE )
 time.sleep(2)
-startStr = ser.readline()
-print(startStr)
+startStr = ser.readline().decode('utf-8')
+
+if startStr != "ready\r\n":
+  print("no connection")
+  quit()
+
+ser.write(b'1234')
+respondStr = ser.readline().decode('utf-8')
+print(respondStr)

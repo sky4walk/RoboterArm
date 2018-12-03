@@ -1,2 +1,2 @@
 python moveCommands.py
-cmd .
+pause
