@@ -1,0 +1,2 @@
+python listComPorts.py
+pause
