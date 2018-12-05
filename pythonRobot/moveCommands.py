@@ -9,6 +9,14 @@ import serial
 port = "COM10"
 baud = 9600
 
+startPosXAxle  = 0
+startPosYLift  = 0
+startPosYArm   = 0
+startPosHand   = 0
+startPosMarble = 0
+
+moveSteps = 2
+
 try:
     # windows
     import msvcrt
@@ -110,12 +118,53 @@ def mainMenu():
     return int(nextState)
 
 def moveByHand(ser):
+    print("Move by Hand")
+    print("a Z-Axle left")
+    print("d Z-Axle right")
+    print("w Y-Lift Arm up")
+    print("s Y-Lift Arm down")
+    print("x Hand open")
+    print("y Hand close")
+    print("e exit")
+    key = getch(1).decode('utf-8')
     sendRecv(ser,b'1234')
-    return 1
-
+    nextState = 2
+    if   key == 'a' :
+        nextState = 2
+    elif key == 'd' :
+        nextState = 2
+    elif key == 'w' :
+        nextState = 2
+    elif key == 's' :
+        nextState = 2
+    elif key == 'x' :
+        nextState = 2
+    elif key == 'y' :
+        nextState = 2
+    elif key == 'e' :
+        nextState = 1
+    else :
+        nextState = 1
+    return nextState
+    
+def getStartPos(ser):
+    #magic command
+    ser.write(b'1999')
+    respondStr = ser.readline().decode('utf-8')
+    print("Z-Axle",respondStr)
+    respondStr = ser.readline().decode('utf-8')
+    print("Y-Lift",respondStr)
+    respondStr = ser.readline().decode('utf-8')
+    print("Y-Lift Arm up",respondStr)
+    respondStr = ser.readline().decode('utf-8')
+    print("Hand",respondStr)
+    respondStr = ser.readline().decode('utf-8')
+    print("Marble",respondStr)
+    
 def mainLoop():
     ser = startSerial()
     waitForArduino(ser)
+    getStartPos(ser)
 
     state = 1
     while 0 < state :
