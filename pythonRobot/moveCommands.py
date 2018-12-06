@@ -27,7 +27,11 @@ except ImportError:
     import tty
 
 def startSerial():
-    serCon = serial.Serial(port, baud, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE )
+    try:
+        serCon = serial.Serial(port, baud, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE )
+    except serial.SerialException as e:
+        print("connection to ",port,"not possible")
+        quit()
     return serCon
 
 def getch(length=1):
