@@ -9,7 +9,7 @@ import serial
 port = "COM10"
 baud = 9600
 
-startPosXAxle  = 0
+startPosZAxle  = 0
 startPosYLift  = 0
 startPosYArm   = 0
 startPosHand   = 0
@@ -31,23 +31,9 @@ def startSerial():
     return serCon
 
 def getch(length=1):
-    """
-    Read a key press and return the result. Nothing is echoed to the
-    console.
-
-    Note that on Windows a special function key press will return its
-    keycode. `Control-C` cannot be read there.
-
-    On Unices it will return one char by default. Thus, when reading
-    a special function key, whose resulting escape sequence could be
-    longer than one char, the `length` value might be changed, since
-    otherwise the remaining characters would be returned by the next
-    calls until stdin is "empty".
-    """
     if msvcrt:
         char = msvcrt.getch()
         if char in ('\000', '\xe0'):
-            # special key -> need a second call to get keycode
             char = msvcrt.getch()
         return char
     else:
@@ -93,16 +79,18 @@ def sendRecv(ser,bytesSend):
 	
 def waitForArduino(ser):
     time.sleep(2)
-    startStr = ser.readline().decode('utf-8')
-    if startStr != "ready\r\n":
+    startStr = ser.readline().decode('utf-8').rstrip('\r\n')
+    if startStr != "ready":
         print("no connection")
         quit()	
 
 def mainMenu():
     print("Menu")
+    print("----")    
     print("h  Movement by hand")
     print("m  Marble Run")
     print("t  Test Display Buttons")
+    print("r  Read positions")
     print("e  exit")
     key = getch(1).decode('utf-8')
     if   key == 'h' :
@@ -111,35 +99,93 @@ def mainMenu():
         nextState = 3
     elif key == 't' :
         nextState = 4
+    elif key == 'r' :
+        printStartPos()
+        nextState = 1
     elif key == 'e' :
         nextState = 0
     else :
         nextState = 1    
     return int(nextState)
 
+def printStartPos():
+    print("Z-Axle\t",startPosZAxle)
+    print("Y-Lift\t",startPosYLift)
+    print("Y-Arm\t",startPosYArm)
+    print("Hand\t",startPosHand)
+    print("Marble\t",startPosMarble)
+    
 def moveByHand(ser):
+    global startPosZAxle
+    global startPosYLift
+    global startPosYArm
+    global startPosHand
+    global startPosMarble
+
     print("Move by Hand")
-    print("a Z-Axle left")
-    print("d Z-Axle right")
-    print("w Y-Lift Arm up")
-    print("s Y-Lift Arm down")
-    print("x Hand open")
-    print("y Hand close")
-    print("e exit")
+    print("------------")
+    print("4 Z-Axle left")
+    print("6 Z-Axle right")
+    print("7 Y-Lift up")
+    print("1 Y-Lift down")
+    print("8 Y-Lift up")
+    print("2 Y-Lift down")
+    print("9 Hand open")
+    print("3 Hand close")
+    print("+ Marble open")
+    print("- Marble close")
+    print("e back")
     key = getch(1).decode('utf-8')
-    sendRecv(ser,b'1234')
     nextState = 2
-    if   key == 'a' :
+    if   key == '4' :
+        startPosZAxle = startPosZAxle + moveSteps
+        sendStr = "1" + str(startPosZAxle).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
         nextState = 2
-    elif key == 'd' :
+    elif key == '6' :
+        startPosZAxle = startPosZAxle - moveSteps
+        sendStr = "1" + str(startPosZAxle).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
         nextState = 2
-    elif key == 'w' :
+    elif key == '7' :
+        startPosYLift = startPosYLift + moveSteps
+        sendStr = "2" + str(startPosYLift).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
         nextState = 2
-    elif key == 's' :
+    elif key == '1' :
+        startPosYLift = startPosYLift - moveSteps
+        sendStr = "2" + str(startPosYLift).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
         nextState = 2
-    elif key == 'x' :
+    elif key == '8' :
+        startPosYArm = startPosYArm + moveSteps
+        sendStr = "3" + str(startPosYArm).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
         nextState = 2
-    elif key == 'y' :
+    elif key == '2' :
+        startPosYArm = startPosYArm - moveSteps
+        sendStr = "3" + str(startPosYArm).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
+        nextState = 2
+    elif key == '9' :
+        startPosHand = startPosHand + moveSteps
+        sendStr = "4" + str(startPosHand).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
+        nextState = 2
+    elif key == '3' :
+        startPosHand = startPosHand - moveSteps
+        sendStr = "4" + str(startPosHand).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
+        nextState = 2
+    elif key == '+' :
+        startPosMarble = startPosMarble + moveSteps
+        sendStr = "5" + str(startPosMarble).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
+        nextState = 2
+    elif key == '-' :
+        startPosMarble = startPosMarble - moveSteps
+        sendStr = "5" + str(startPosMarble).zfill(3) 
+        sendRecv(ser,sendStr.encode('utf-8'))
         nextState = 2
     elif key == 'e' :
         nextState = 1
@@ -148,18 +194,23 @@ def moveByHand(ser):
     return nextState
     
 def getStartPos(ser):
+    global startPosZAxle
+    global startPosYLift
+    global startPosYArm
+    global startPosHand
+    global startPosMarble
     #magic command
     ser.write(b'1999')
-    respondStr = ser.readline().decode('utf-8')
-    print("Z-Axle",respondStr)
-    respondStr = ser.readline().decode('utf-8')
-    print("Y-Lift",respondStr)
-    respondStr = ser.readline().decode('utf-8')
-    print("Y-Lift Arm up",respondStr)
-    respondStr = ser.readline().decode('utf-8')
-    print("Hand",respondStr)
-    respondStr = ser.readline().decode('utf-8')
-    print("Marble",respondStr)
+    respondStr = ser.readline().decode('utf-8').rstrip('\r\n')
+    startPosZAxle = int(respondStr)
+    respondStr = ser.readline().decode('utf-8').rstrip('\r\n')
+    startPosYLift = int(respondStr)
+    respondStr = ser.readline().decode('utf-8').rstrip('\r\n')
+    startPosYArm = int(respondStr)
+    respondStr = ser.readline().decode('utf-8').rstrip('\r\n')
+    startPosHand = int(respondStr)
+    respondStr = ser.readline().decode('utf-8').rstrip('\r\n')
+    startPosMarble = int(respondStr)
     
 def mainLoop():
     ser = startSerial()
