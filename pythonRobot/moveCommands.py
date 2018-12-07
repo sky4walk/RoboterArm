@@ -215,6 +215,15 @@ def getStartPos(ser):
     startPosHand = int(respondStr)
     respondStr = ser.readline().decode('utf-8').rstrip('\r\n')
     startPosMarble = int(respondStr)
+
+def marbleRun(ser):
+    nextState = 1
+    return nextState
+
+def testDisplayButtons(ser):
+    nextState = 1
+    return nextState
+    
     
 def mainLoop():
     ser = startSerial()
@@ -227,6 +236,10 @@ def mainLoop():
             state = mainMenu()
         elif 2 == state :
             state = moveByHand(ser)
+        elif 3 == state :
+            state = marbleRun(ser)
+        elif 4 == state :
+            state = testDisplayButtons(ser)
         else :
             state = 0
         
