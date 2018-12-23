@@ -10,7 +10,7 @@ int bluetoothRx = 7;
 int startPosZAxle  = 90;
 int startPosYLift  = 100;
 int startPosYArm   = 40;
-int startPosHand   = 65;
+int startPosHand   = 60;
 int startPosMarble = 60;
 unsigned int showPosCmd = 999;
 

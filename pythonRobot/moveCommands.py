@@ -6,7 +6,7 @@
 import time
 import serial
 
-port = "COM10"
+port = "COM4"
 baud = 9600
 
 startPosZAxle  = 0
@@ -15,7 +15,7 @@ startPosYArm   = 0
 startPosHand   = 0
 startPosMarble = 0
 
-moveSteps = 2
+moveSteps = 5
 
 try:
     # windows
