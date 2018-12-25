@@ -1,2 +1,3 @@
-python moveCommands.py
+
+python moveMaestro.py
 pause
