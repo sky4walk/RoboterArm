@@ -18,7 +18,7 @@ servo.setAccel(4,0)      #set servo 0 acceleration to 4
 servo.setSpeed(4,0)     #set speed of servo 1
 
 #save arm
-servo.setTarget(3,5420)
+servo.setTarget(3,5560)
 time.sleep(2)
 servo.setTarget(0,5268)
 servo.setTarget(1,7920)
@@ -26,11 +26,18 @@ servo.setTarget(2,5380)
 time.sleep(2)
 
 #take pencil
-servo.setTarget(0,5268)  
-servo.setTarget(1,6492)  
-servo.setTarget(2,8000)  
+servo.setTarget(0,5300)  
+servo.setTarget(1,6940)  
+servo.setTarget(2,7608)  
 time.sleep(2)
-servo.setTarget(3,4516)  
-
+servo.setTarget(3,4200)  
+time.sleep(3)
+servo.setTarget(1,7804)  
+servo.setTarget(2,7020)  
+time.sleep(1)
+servo.setTarget(1,7920)
+servo.setTarget(2,5380)
+time.sleep(1)
+servo.setTarget(0,9000)
 
 servo.close()
